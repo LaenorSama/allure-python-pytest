@@ -11,7 +11,7 @@ on:
       ENDPOINT:
         description: Endpoint
         required: false
-        default: demo.qatools.cloud/
+        default: https://demo.qatools.cloud/
       BROWSER:
         description: Browser
         required: false
@@ -26,8 +26,8 @@ on:
 
 env:
   ALLURE_ENDPOINT: https://demo.qatools.cloud/
-  ALLURE_PROJECT_ID: 127
-  ALLURE_TOKEN: ${{ secrets.TESTOPS_TOKEN }}
+  ALLURE_PROJECT_ID: 165
+  ALLURE_TOKEN: ${{ secrets.ALLURE_TOKEN }}
   ALLURE_JOB_RUN_ID: ${{ github.event.inputs.ALLURE_JOB_RUN_ID }}
   ALLURE_RESULTS: "allure-results"
 
@@ -52,8 +52,8 @@ jobs:
         uses: allure-framework/setup-allurectl@v1
         with:
           allure-endpoint: https://demo.qatools.cloud/
-          allure-token: ${{ secrets.TESTOPS_TOKEN }}
-          allure-project-id: 127
+          allure-token: ${{ secrets.ALLURE_TOKEN }}
+          allure-project-id: 165
           
       - name: Run tests
         run: allurectl watch -- pytest --alluredir=${ALLURE_RESULTS} --capture=no
