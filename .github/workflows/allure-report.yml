@@ -11,7 +11,7 @@ on:
       ENDPOINT:
         description: Endpoint
         required: false
-        default: https://demo.qatools.cloud/
+        default: https://dem.qatools.cloud/
       BROWSER:
         description: Browser
         required: false
@@ -25,7 +25,7 @@ on:
         required: false
 
 env:
-  ALLURE_ENDPOINT: https://demo.qatools.cloud/
+  ALLURE_ENDPOINT: https://dem.qatools.cloud/
   ALLURE_PROJECT_ID: 165
   ALLURE_TOKEN: ${{ secrets.ALLURE_TOKEN }}
   ALLURE_JOB_RUN_ID: ${{ github.event.inputs.ALLURE_JOB_RUN_ID }}
@@ -51,7 +51,7 @@ jobs:
       - name: Install allurectl
         uses: allure-framework/setup-allurectl@v1
         with:
-          allure-endpoint: https://demo.qatools.cloud/
+          allure-endpoint: https://dem.qatools.cloud/
           allure-token: ${{ secrets.ALLURE_TOKEN }}
           allure-project-id: 165
           
