@@ -1,0 +1,85 @@
+# Название workflow
+name: testops_python_old
+
+# переменные окружения
+env:
+  ALLURE_ENDPOINT: https://demo.qatools.cloud/
+  ALLURE_PROJECT_ID: 165
+  ALLURE_TOKEN: ${{ secrets.ALLURE_TOKEN }}
+  #ALLURE_JOB_RUN_ID: ${{ github.event.inputs.ALLURE_JOB_RUN_ID }}
+  ALLURE_RESULTS: "allure-results"
+
+# Триггеры для запуска workflow
+on:
+#  schedule:
+#    - cron: "0 */12 * * *"
+
+# пуш и пулл реквест
+#  push:
+#    branches:
+#      - main
+#  pull_request:
+#    branches:
+#      - main
+     
+# вручную    
+  workflow_dispatch:
+    inputs:
+      #ENDPOINT:
+      #  description: "Endpoint"
+      #  required: false
+      #  default: "https://demo.qatools.cloud/"
+      BROWSER:
+        description: Browser
+        required: false
+        default: "OperaGX"
+      OS:
+        description: OS
+        required: false
+        default: "Win_11"
+      #ALLURE_JOB_RUN_ID:
+      #  description: "ALLURE_JOB_RUN_ID - service parameter (leave blank)"
+      #  required: false
+      #  default: ""
+      #ALLURE_USERNAME:
+      #  description: "ALLURE_USERNAME - service parameter (leave blank)"
+      #  required: false
+      #  default: ""
+      #BRANCH:
+      #  description: "Git branch (filled automatically)"
+      #  required: false
+      #  default: ""
+
+jobs:
+  autotests: 
+    name: Run tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          
+      - name: Install allurectl
+        uses: allure-framework/setup-allurectl@v1
+        with:
+          allure-endpoint: https://demo.qatools.cloud/
+          allure-token: ${{ secrets.ALLURE_TOKEN }}
+          allure-project-id: 165
+          
+      - name: Run tests
+        run: allurectl watch -- pytest --alluredir=${ALLURE_RESULTS} --capture=no
+        env:
+          BRANCH: ${{ github.ref_name }}
+          ENDPOINT: ${{ env.ALLURE_ENDPOINT }}
+          #ENDPOINT: ${{ github.event.inputs.ENDPOINT}}
+          BROWSER: ${{ github.event.inputs.BROWSER}}
+          OS: ${{ github.event.inputs.OS}}
+          #ALLURE_JOB_RUN_ID: ${{ github.event.inputs.ALLURE_JOB_RUN_ID }}
